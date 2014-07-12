@@ -1,0 +1,40 @@
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+</head>
+
+<h1 id="demo"><center>Do I need an Umbrella?</center></h1>
+<center class="results"></center>
+
+<script>
+        var x = document.getElementById("demo");
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(doPost);
+                //console.log(navigator.geolocation.getCurrentPosition);
+            } 
+            else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function doPost(position) {
+            $.post('/update', {lat:position.coords.latitude,long:position.coords.longitude}, function(res){
+                //do something with res
+                console.log(res);
+                var html = '<p><strong>Currently it is</strong>: '+res.currently+'</p><br><p><strong>However</strong>:  '+res.hourly+'</p><br><p><strong>After that</strong>: '+res.daily+'</p>'
+                $(html).hide().appendTo('.results').fadeIn(1000);
+                
+            })
+            /*x.innerHTML="Latitude: " + position.coords.latitude + 
+            "<br>Longitude: " + position.coords.longitude;*/
+            }
+    </script>
+
+<script>
+    getLocation();
+</script>
+
